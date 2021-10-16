@@ -25,33 +25,33 @@ const DropDown = ({
       >
         <div
           onClick={() => {
-            onChangeSortBy('petName')
+            onChangeSortBy('name')
           }}
           className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer'
           role='menuitem'
         >
-          Pet Name {sortBy === 'petName' && <BiCheck />}
+          Name: {sortBy === 'name' && <BiCheck />}
         </div>
         <div
           onClick={() => {
-            onChangeSortBy('ownerName')
+            onChangeSortBy('appointment')
           }}
           className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer'
           role='menuitem'
         >
-          Owner Name {sortBy === 'ownerName' && <BiCheck />}
+          Appointment: {sortBy === 'appointment' && <BiCheck />}
         </div>
         <div
           aria-disabled={true}
           onClick={() => {
-            onChangeSortBy('aptDate')
+            onChangeSortBy('date')
           }}
           className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer'
           role='menuitem'
         >
-          Date {sortBy === 'aptDate' && <BiCheck />}
+          Date: {sortBy === 'date' && <BiCheck />}
         </div>
-        <div
+        {/* <div
           onClick={() => {
             onChangeOrderBy('asc')
           }}
@@ -68,7 +68,7 @@ const DropDown = ({
           role='menuitem'
         >
           Desc {orderBy === 'desc' && <BiCheck />}
-        </div>
+        </div> */}
       </div>
     </div>
   )

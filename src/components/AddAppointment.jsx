@@ -1,28 +1,35 @@
 import { useState } from 'react'
 import { BiCalendarPlus } from 'react-icons/bi'
+import api from '../api/api';
 
 const initialValues = {
-  ownerName: '',
-  petName: '',
-  aptNotes: '',
-  aptDate: '',
-  aptTime: ''
+  name: '',
+  appointment: '',
+  notes: '',
+  date: '',
+  time: ''
 }
 
-const AddAppointment = ({ onSendAppointment, lastId }) => {
+const AddAppointment = () => {
   const [toggleAppointment, setToggleAppointment] = useState(false)
   const [formData, setFormData] = useState(initialValues)
 
-  const handleSubmitFormData = () => {
+  const handleSubmitFormData = async () => {
     const appointmentData = {
-      id: lastId + 1,
-      ownerName: formData.ownerName,
-      petName: formData.petName,
-      aptNotes: formData.aptNotes,
-      aptDate: formData.aptDate + ' ' + formData.aptTime
+      name: formData.name,
+      appointment: formData.appointment,
+      notes: formData.notes,
+      date: formData.date + ' ' + formData.time
+    }
+    try {
+      await api.post(
+        'appointment/',
+        appointmentData
+      )
+    } catch (error) {
+      console.log(error)
     }
 
-    onSendAppointment(appointmentData)
     setFormData(initialValues)
     setToggleAppointment(!toggleAppointment)
   }
@@ -48,14 +55,14 @@ const AddAppointment = ({ onSendAppointment, lastId }) => {
                 htmlFor='ownerName'
                 className='block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'
               >
-                Owner Name
+                Fullname
               </label>
               <div className='mt-1 sm:mt-0 sm:col-span-2'>
                 <input
                   onChange={event => {
-                    setFormData({ ...formData, ownerName: event.target.value })
+                    setFormData({ ...formData, name: event.target.value })
                   }}
-                  value={formData.ownerName}
+                  value={formData.name}
                   type='text'
                   name='ownerName'
                   id='ownerName'
@@ -69,14 +76,17 @@ const AddAppointment = ({ onSendAppointment, lastId }) => {
                 htmlFor='petName'
                 className='block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'
               >
-                Pet Name
+                Appointment 
               </label>
               <div className='mt-1 sm:mt-0 sm:col-span-2'>
                 <input
                   onChange={event => {
-                    setFormData({ ...formData, petName: event.target.value })
+                    setFormData({
+                      ...formData,
+                      appointment: event.target.value
+                    })
                   }}
-                  value={formData.petName}
+                  value={formData.appointment}
                   type='text'
                   name='petName'
                   id='petName'
@@ -87,17 +97,38 @@ const AddAppointment = ({ onSendAppointment, lastId }) => {
 
             <div className='sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5'>
               <label
+                htmlFor='aptNotes'
+                className='block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'
+              >
+                Key Notes
+              </label>
+              <div className='mt-1 sm:mt-0 sm:col-span-2'>
+                <textarea
+                  onChange={event => {
+                    setFormData({ ...formData, notes: event.target.value })
+                  }}
+                  id='aptNotes'
+                  name='aptNotes'
+                  rows='3'
+                  className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 max-w-lg block w-full sm:text-sm border-gray-300 rounded-md _width'
+                  placeholder='Detailed comments about the condition'
+                ></textarea>
+              </div>
+            </div>
+
+            <div className='sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5'>
+              <label
                 htmlFor='aptDate'
                 className='block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'
               >
-                Apt Date
+                Date
               </label>
               <div className='mt-1 sm:mt-0 sm:col-span-2'>
                 <input
                   onChange={event => {
-                    setFormData({ ...formData, aptDate: event.target.value })
+                    setFormData({ ...formData, date: event.target.value })
                   }}
-                  value={formData.aptDate}
+                  value={formData.date}
                   type='date'
                   name='aptDate'
                   id='aptDate'
@@ -111,14 +142,14 @@ const AddAppointment = ({ onSendAppointment, lastId }) => {
                 htmlFor='aptTime'
                 className='block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'
               >
-                Apt Time
+                Time
               </label>
               <div className='mt-1 sm:mt-0 sm:col-span-2'>
                 <input
                   onChange={event => {
-                    setFormData({ ...formData, aptTime: event.target.value })
+                    setFormData({ ...formData, time: event.target.value })
                   }}
-                  value={formData.aptTime}
+                  value={formData.time}
                   type='time'
                   name='aptTime'
                   id='aptTime'
@@ -127,26 +158,6 @@ const AddAppointment = ({ onSendAppointment, lastId }) => {
               </div>
             </div>
 
-            <div className='sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5'>
-              <label
-                htmlFor='aptNotes'
-                className='block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'
-              >
-                Appointment Notes
-              </label>
-              <div className='mt-1 sm:mt-0 sm:col-span-2'>
-                <textarea
-                  onChange={event => {
-                    setFormData({ ...formData, aptNotes: event.target.value })
-                  }}
-                  id='aptNotes'
-                  name='aptNotes'
-                  rows='3'
-                  className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md'
-                  placeholder='Detailed comments about the condition'
-                ></textarea>
-              </div>
-            </div>
 
             <div className='pt-5'>
               <div className='flex justify-end'>

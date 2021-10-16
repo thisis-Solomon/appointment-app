@@ -9,3 +9,11 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+._container{
+  max-width: 780px;
+}
+
+._width{
+  max-width: 320px;
+}
