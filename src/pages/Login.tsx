@@ -55,7 +55,7 @@ const Login = () => (
           </button>
           <p className="text-xs">
             Don't have account{" "}
-            <Link className="text-sky-500 hover:underline" to="signup">
+            <Link className="text-sky-500 hover:underline" to="/signup">
               signup
             </Link>
           </p>
@@ -65,7 +65,7 @@ const Login = () => (
     <div className="w-full h-[1px] bg-orange-600 my-2" />
     <section className="flex justify-center flex-col items-center">
       <p>OR</p>
-      <button className="w-full bg-sky-500/45 py-2 mt-2 flex items-center justify-center gap-4">
+      <button className="w-full bg-sky-500/45 py-2 mt-2 rounded-md flex items-center justify-center gap-4">
         <FcGoogle />
         <span>Google account</span>
       </button>
