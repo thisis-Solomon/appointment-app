@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { BiCalendarPlus } from 'react-icons/bi'
 import api from '../api/api';
+import { appointmentData } from '../types';
 
-const initialValues = {
+const initialValues: appointmentData = {
   name: '',
   appointment: '',
   notes: '',
@@ -23,7 +24,7 @@ const AddAppointment = () => {
     }
     try {
       await api.post(
-        'appointment/',
+        'appointments.json',
         appointmentData
       )
     } catch (error) {
