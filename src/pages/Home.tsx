@@ -57,7 +57,7 @@ function Home() {
         <h1 className="text-xl font-bold uppercase text-orange-600 px-8">
           Welcome to Schedulify – Your Personal Appointment Wizard!
         </h1>
-        <p className="mt-2 mb-4 text-xl text-gray-700">
+        <p className="mt-2 mb-4 text-md text-gray-700">
           Effortlessly organize your appointments and stay on top of your
           schedule.
         </p>
