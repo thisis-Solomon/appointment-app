@@ -4,16 +4,33 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { createContext } from "react";
+import { ReactNode, createContext, useState, useEffect } from "react";
 import { auth } from "../firebase/config";
 
-const AuthContext = createContext({
-  user: "",
-  login: () => Promise<void>,
-  signup: () => Promise<void>,
-});
+interface AuthContextType {
+  user: string | null;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string) => Promise<void>;
+  signupWithGoogleAccount: () => Promise<void>;
+  logout: () => Promise<void>;
+}
 
-export const AuthContextProvider = ({ children }) => {
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+interface AuthContextProviderProps {
+  children: ReactNode;
+}
+
+export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
+  const [user, setUser] = useState<string | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user ? user.email : null);
+    });
+    return () => unsubscribe();
+  }, []);
+
   const provider = new GoogleAuthProvider();
 
   const login = async (email: string, password: string) => {
@@ -27,11 +44,20 @@ export const AuthContextProvider = ({ children }) => {
   const signupWithGoogleAccount = async () => {
     await signInWithPopup(auth, provider);
   };
-  const valueCtx = {
+
+  const logout = async () => {
+    await auth.signOut();
+    setUser(null);
+  };
+
+  const valueCtx: AuthContextType = {
+    user,
     login,
     signup,
     signupWithGoogleAccount,
+    logout,
   };
+
   return (
     <AuthContext.Provider value={valueCtx}>{children}</AuthContext.Provider>
   );

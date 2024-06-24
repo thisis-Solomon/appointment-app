@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Layout from "./pages/Layout";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import { AuthContextProvider } from "./store/authContext";
 
 const route = createBrowserRouter([
   {
@@ -16,7 +17,11 @@ const route = createBrowserRouter([
   },
 ]);
 const App = () => {
-  return <RouterProvider router={route} />;
+  return (
+    <AuthContextProvider>
+      <RouterProvider router={route} />
+    </AuthContextProvider>
+  );
 };
 
 export default App;
