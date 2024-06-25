@@ -4,22 +4,31 @@ import Layout from "./pages/Layout";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { AuthContextProvider } from "./store/authContext";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
-const route = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
-      { index: true, element: <Home /> },
+      {
+        index: true,
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
+      },
       { path: "login", element: <Login /> },
       { path: "signup", element: <Signup /> },
     ],
   },
 ]);
+
 const App = () => {
   return (
     <AuthContextProvider>
-      <RouterProvider router={route} />
+      <RouterProvider router={router} />
     </AuthContextProvider>
   );
 };

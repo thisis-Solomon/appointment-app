@@ -1,11 +1,14 @@
+// src/store/authContext.tsx
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
+  onAuthStateChanged,
 } from "firebase/auth";
-import { ReactNode, createContext, useState, useEffect } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 import { auth } from "../firebase/config";
+import { Navigate } from "react-router-dom";
 
 interface AuthContextType {
   user: string | null;
@@ -15,7 +18,13 @@ interface AuthContextType {
   logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>({
+  user: null,
+  login: (email: string, password: string) => Promise<void>,
+  signup: (email: string, password: string) => Promise<void>,
+  signupWithGoogleAccount: () => Promise<void>,
+  logout: () => Promise<void>,
+});
 
 interface AuthContextProviderProps {
   children: ReactNode;
@@ -25,24 +34,37 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [user, setUser] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user ? user.email : null);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user.uid);
+      } else {
+        setUser(null);
+      }
     });
+
     return () => unsubscribe();
   }, []);
 
-  const provider = new GoogleAuthProvider();
-
   const login = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
+    if (user) {
+      <Navigate to="/" />;
+    }
   };
 
   const signup = async (email: string, password: string) => {
     await createUserWithEmailAndPassword(auth, email, password);
+    if (user) {
+      <Navigate to="/" />;
+    }
   };
 
   const signupWithGoogleAccount = async () => {
+    const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
+    if (user) {
+      <Navigate to="/" />;
+    }
   };
 
   const logout = async () => {
@@ -50,7 +72,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     setUser(null);
   };
 
-  const valueCtx: AuthContextType = {
+  const valueCtx = {
     user,
     login,
     signup,
