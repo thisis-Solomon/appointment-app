@@ -3,6 +3,6 @@ export type appointmentData = {
   date: string;
   appointment: string;
   notes: string;
-  id?: string;
-  time?: "";
+  $id?: string;
+  time?: '';
 };

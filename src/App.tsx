@@ -1,26 +1,25 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Home from "./pages/Home";
-import Layout from "./pages/Layout";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import { AuthContextProvider } from "./store/authContext";
-import ProtectedRoute from "./pages/ProtectedRoute";
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Home from './pages/Home';
+import Layout from './pages/Layout';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import { AuthContextProvider } from './store/authContext';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Layout />,
     children: [
       {
         index: true,
         element: (
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
+          // <ProtectedRoute>
+          <Home />
+          // </ProtectedRoute>
         ),
       },
-      { path: "login", element: <Login /> },
-      { path: "signup", element: <Signup /> },
+      { path: 'login', element: <Login /> },
+      { path: 'signup', element: <Signup /> },
     ],
   },
 ]);

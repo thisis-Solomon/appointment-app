@@ -1,6 +1,6 @@
-import { BiEdit, BiTrash } from "react-icons/bi";
-import { useState } from "react";
-import api from "../api/api";
+import { useState } from 'react';
+import { BiEdit, BiTrash } from 'react-icons/bi';
+import { database } from '../appwrite/config';
 
 const AppointmentInfo = ({ appointment }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -17,21 +17,16 @@ const AppointmentInfo = ({ appointment }) => {
   };
 
   const handleDelete = async () => {
-    const appoint = await api.delete(`appointments/${appointment.id}.json`);
-    console.log(appoint);
+    await database.deleteDocument(
+      import.meta.env.VITE_DATABASES_ID,
+      import.meta.env.VITE_COLLECTION_APPOINTMENTS_ID,
+      appointment.$id
+    );
+    console.log('remove schedule');
   };
 
   const handleEdit = async () => {
-    try {
-      const response = await api.patch(
-        `appointments/${appointment.id}.json`,
-        updatedAppointment
-      );
-      console.log("Data updated successfully:", response.data);
-      setIsEditing(false); // Close edit form
-    } catch (error) {
-      console.error("Error updating the appointment:", error);
-    }
+    console.log('edit data');
   };
 
   return (

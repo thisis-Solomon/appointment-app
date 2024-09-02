@@ -1,22 +1,17 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useContext } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
-import * as Yup from "yup";
-import AuthContext from "../store/authContext";
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import * as Yup from 'yup';
+import AuthContext from '../store/authContext';
 
 const Login = () => {
   const authContext = useContext(AuthContext);
 
   if (!authContext) {
-    throw new Error("AuthContext must be used within an AuthContextProvider");
+    throw new Error('AuthContext must be used within an AuthContextProvider');
   }
 
-  const { login, signupWithGoogleAccount } = authContext;
-
-  async function handleLoginWithGoogleAccount() {
-    await signupWithGoogleAccount()
-  }
+  const { login } = authContext;
 
   return (
     <div>
@@ -30,18 +25,18 @@ const Login = () => {
         </p>
       </header>
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: '', password: '' }}
         validationSchema={Yup.object({
           email: Yup.string()
-            .email("Invalid email address")
-            .required("Required"),
-          password: Yup.string().required("Required"),
+            .email('Invalid email address')
+            .required('Required'),
+          password: Yup.string().required('Required'),
         })}
         onSubmit={async (values, { setSubmitting }) => {
           try {
             await login(values.email, values.password);
           } catch (error) {
-            console.error("Login failed:", error);
+            console.error('Login failed:', error);
           } finally {
             setSubmitting(false);
           }
@@ -89,7 +84,7 @@ const Login = () => {
                 Login
               </button>
               <p className="text-xs">
-                Don't have an account?{" "}
+                Don't have an account?{' '}
                 <Link className="text-sky-500 hover:underline" to="/signup">
                   Sign up
                 </Link>
@@ -98,16 +93,6 @@ const Login = () => {
           </Form>
         )}
       </Formik>
-      <div className="w-full h-[1px] bg-orange-600 my-2" />
-      <section className="flex justify-center flex-col items-center">
-        <p>OR</p>
-        <button className="w-full bg-sky-500/45 py-2 mt-2 rounded-md flex items-center justify-center gap-4">
-          <FcGoogle />
-          <button onClick={handleLoginWithGoogleAccount}>
-            Google account
-          </button>
-        </button>
-      </section>
     </div>
   );
 };
